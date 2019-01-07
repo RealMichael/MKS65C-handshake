@@ -11,7 +11,25 @@
   returns the file descriptor for the upstream pipe.
   =========================*/
 int server_handshake(int *to_client) {
-  return 0;
+	int des = mkfifo("troy",0644);
+	if(des == -1){
+	printf("Err");
+	}
+
+	int rancid = open("troy",O_RDONLY);
+	char first[BUFFER_SIZE];
+	read(rancid,first,BUFFER_SIZE);
+	printf("Initial: %s\n", first);
+
+	*to_client = open(first,O_WRONLY);
+	write(*to_client, "Hello!",10);
+	
+	char second[BUFFER_SIZE];
+	read(rancid,second, BUFFER_SIZE);
+	printf("Got: %s\n", second);
+	
+	return rancid;
+
 }
 
 
@@ -25,5 +43,41 @@ int server_handshake(int *to_client) {
   returns the file descriptor for the downstream pipe.
   =========================*/
 int client_handshake(int *to_server) {
-  return 0;
+	int ran = mkfifo("dom",0644);
+	if(ran == -1){
+	printf("ERR");
+	}
+
+	*to_server = open("troy",O_WRONLY);
+	printf("Connected");
+	write(*to_server,"Thanks for the greeting",50);
+	
+	char third[BUFFER_SIZE];
+	int beast = open(third,O_RDONLY);
+	
+	printf("Server- %d \n", beast);
+	char four[BUFFER_SIZE];
+	read(beast,four,BUFFER_SIZE);
+	printf("Message is %s\n",four);
+	
+	
+	return beast;
+
+
+
+
+
+
+ // return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
